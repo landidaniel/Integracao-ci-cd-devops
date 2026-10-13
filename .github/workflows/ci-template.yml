@@ -1,0 +1,51 @@
+name: CI - Template
+
+on:
+  workflow_call:
+    inputs:
+      versao-python:
+        description: "Versão usada para instalação do Python"
+        required: true
+        type: string
+
+      path-tests:
+        description: "Pasta onde estão os testes"
+        required: false
+        default: "tests/"
+        type: string
+
+    secrets:
+      TOKEN_NUVEM:
+        description: "Token OIDC da nuvem"
+        required: true
+
+jobs:
+  validacao-ambiente:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ inputs.versao-python }}
+          cache: poetry
+
+      - name: Install Ruff
+        run: pip install ruff
+
+      - name: Run Linter
+        run: ruff check .
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Tests
+        run: poetry run python -m pytest ${{ inputs.path-tests }} -v
+        env:
+          TOKEN_NUVEM: ${{ secrets.TOKEN_NUVEM }}
