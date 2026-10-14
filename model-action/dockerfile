@@ -1,0 +1,10 @@
+FROM alpine:3.18
+
+# Instalamos ferramentas de sistema que o script vai precisar
+RUN apk add --no-cache bash curl jq grep
+
+# Copiamos o script sujo para dentro do contêiner
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
