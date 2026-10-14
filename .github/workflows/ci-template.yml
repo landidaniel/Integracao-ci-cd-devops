@@ -45,6 +45,9 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
+      - name: Preparar dados para os testes
+        run: poetry run python src/models/preparar-dados.py
+
       - name: Tests
         run: poetry run python -m pytest ${{ inputs.path-tests }} -v
         env:
