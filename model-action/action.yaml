@@ -1,0 +1,19 @@
+name: 'Auditoria de MLOps'
+description: "roda testes complexos de compliance, assina o modelo"
+author: 'Cientistas de dados'
+
+inputs:
+  path-model:
+    description: "Apontar path do modelo pkl"
+    required: true
+    default: 'modelo.pkl'
+  nivel-alerta:
+    description: "Nivel do LOGS (INFO, WARNING, ERROR)"
+    required: true
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.path-model }}
+    - ${{ inputs.nivel-alerta }}
